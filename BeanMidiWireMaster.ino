@@ -2,9 +2,12 @@
  * 
  * USB MIDI to BLE MIDI converter for LightBlue Bean+
  * 
- * USB MIDI messages received by an Arduino connected to a USB Host Shield
- * are fowarded by the Bean+ as BLE MIDI. Install this sketch on the Bean+ and 
- * install UsbMidiWireSlave on the Arduino connected to the USB Host Shield.
+ * MIDI messages from a USB MIDI instrument are received by a USB Host Shield
+ * attached to another Arduino, fowarded to the Bean+ running this sketch, and
+ * then transmitted as BLE MIDI messages.
+ * 
+ * Run this sketch on a Bean+ and run the UsbMidiWireSlave sketch on an Arduino
+ * connected to a USB Host Shield. The two sketches communicate using I2C.
  * 
  * Connect Bean+'s I2C Grove Connector to Arduino's SDA/SCL pins, 5v and GND.
  * 
