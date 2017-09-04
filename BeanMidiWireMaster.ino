@@ -38,8 +38,7 @@ void loop() {
   uint8_t message[3];
   boolean overflow = false;
   while (!overflow && receive(message) && connected) {
-    if (!handle(message)) continue;
-    overflow = !BeanMidi.loadMessage(message[0], message[1], message[2]);
+    overflow = !dispatch(message);
   }
   if (overflow) {
     BeanMidi.sendMessages();
@@ -51,11 +50,7 @@ void loop() {
 
 void displayConnectionState() {
   // LED is blue until we're connected
-  if (connected) {
-    Bean.setLedBlue(0);
-  } else {
-    Bean.setLedBlue(255);
-  }
+  Bean.setLedBlue(connected ? 0 : 255);
 }
 
 boolean receive(uint8_t message[]) {
@@ -73,14 +68,20 @@ boolean receive(uint8_t message[]) {
   return false;
 }
 
-boolean handle(uint8_t message[]) {
-  uint8_t event = message[0] & 0xf0;
-  switch (event) {
+// returns false if loadMessage failed due to overflow 
+boolean dispatch(uint8_t message[]) {
+  switch (message[0] & 0xF0) {
     case 0x80: // Note Off
     case 0x90: // Note On
-//    case 0xb0: // Control Change
-      return true;
+    case 0xA0: // After Touch Poly
+    case 0xB0: // Control Change
+    case 0xE0: // Pitch Bend
+      return BeanMidi.loadMessage(message[0], message[1], message[2]);
+
+    case 0xC0: // Program Change
+    case 0xD0: // After Touch Channel
+      return BeanMidi.loadMessage(message[0], message[1], 0);
   }
-  return false;
+  return true;
 }
 
