@@ -74,12 +74,12 @@ boolean dispatch(uint8_t message[]) {
     case 0x80: // Note Off
     case 0x90: // Note On
     case 0xA0: // After Touch Poly
-    case 0xB0: // Control Change
+    //case 0xB0: // Control Change
     case 0xE0: // Pitch Bend
       return BeanMidi.loadMessage(message[0], message[1], message[2]);
 
     case 0xC0: // Program Change
-    case 0xD0: // After Touch Channel
+    //case 0xD0: // After Touch Channel
       return BeanMidi.loadMessage(message[0], message[1], 0);
   }
   return true;
