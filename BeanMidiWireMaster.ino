@@ -40,12 +40,10 @@ void loop() {
   while (!overflow && receive(message) && connected) {
     overflow = !dispatch(message);
   }
+  while (BeanMidi.sendMessages());
   if (overflow) {
-    BeanMidi.sendMessages();
     BeanMidi.loadMessage(message[0], message[1], message[2]);
   }
-  // Send all loaded messages
-  while (BeanMidi.sendMessages());
 }
 
 void displayConnectionState() {
